@@ -1,0 +1,57 @@
+<div class="wrap">
+    <h1>{{ admin_page_title }}</h1>
+
+    <p style="color:#ce5d2c">
+        {{ error_msg }}
+    </p>
+
+    <form name="form_options_list" action="options.php" method="post">
+        <table style="padding-top:0;margin-top:0">
+            <tr>
+                <td>{{ settings_fields }}</td>
+            </tr>
+            <tr>
+                <td>{{ do_settings_sections }}</td>
+            </tr>
+            <tr>
+                <td>
+                    {{ submit_button }}
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="form-table">
+        <tr style="border-top:1px solid black;">
+            <td style="border-bottom:1px solid black;">
+                <input type="submit" class="button-large process-sync-btn" value="Sync to Backblaze now!" name="process_sync_btn" style="background: #e36a36;border-color: black;color: #fff;text-decoration: none;text-shadow: #0a0a0a;font-size: 14px;padding: 5px 10px;cursor: pointer;border-width: 1px;border-radius: 3px;" />
+                <br>
+                <p style="color:#ce5d2c;display:none;" class="info_msg_box_ajax">
+                    Sync process has been initiated, check the log periodically
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+jQuery(document).ready(function() {
+    jQuery(".process-sync-btn").click(function () {
+        console.log('Ajax b2-sync started syncing process');
+        jQuery('.info_msg_box_ajax').css('display', 'block');
+        setTimeout(function() {
+            jQuery('.info_msg_box_ajax').css('display', 'none');
+        }, 15000);
+        jQuery.ajax({
+            type: "POST",
+            url: "{{ admin_url }}admin-ajax.php",
+            data: {
+                action: 'ajax_method_to_trigger_sync',
+                nonce: '{{ settings_page_nonce }}'
+            },
+            success: function (success_output) {
+            },
+            error: function(error_message){
+            }
+        });
+    });
+});
+</script>
